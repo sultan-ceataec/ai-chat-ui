@@ -1,14 +1,18 @@
+using Microsoft.Extensions.Logging;
+
 namespace Web.Features.Chat;
 
 public sealed class ChatSession
 {
     private readonly IChatService _chatService;
+    private readonly ILogger<ChatSession> _logger;
     private readonly List<ChatMessage> _messages = [];
     private CancellationTokenSource? _cts;
 
-    public ChatSession(IChatService chatService)
+    public ChatSession(IChatService chatService, ILogger<ChatSession> logger)
     {
         _chatService = chatService;
+        _logger = logger;
     }
 
     public IReadOnlyList<ChatMessage> Messages => _messages;
@@ -23,6 +27,7 @@ public sealed class ChatSession
     {
         if (IsStreaming || string.IsNullOrWhiteSpace(userText))
         {
+            _logger.LogDebug("Send ignored. IsStreaming={IsStreaming} HasText={HasText}", IsStreaming, !string.IsNullOrWhiteSpace(userText));
             return;
         }
 
@@ -31,6 +36,8 @@ public sealed class ChatSession
         _messages.Add(new ChatMessage(ChatRole.Assistant, string.Empty));
         IsStreaming = true;
         Notify();
+
+        _logger.LogDebug("Send started. ConversationMessages={MessageCount}.", _messages.Count);
 
         _cts = new CancellationTokenSource();
         var assistantIndex = _messages.Count - 1;
@@ -45,13 +52,21 @@ public sealed class ChatSession
                 };
                 Notify();
             }
+
+            _logger.LogDebug(
+                "Send completed. AssistantLength={Length}.",
+                _messages[assistantIndex].Content.Length);
         }
         catch (OperationCanceledException)
         {
-            // User cancelled; keep partial assistant text if any.
+            _logger.LogInformation("Chat request cancelled.");
+            _logger.LogDebug(
+                "Partial assistant reply kept. Length={Length}.",
+                _messages[assistantIndex].Content.Length);
         }
         catch (ChatException ex)
         {
+            _logger.LogError(ex, "Chat request failed.");
             Error = ex.Message;
             if (string.IsNullOrEmpty(_messages[assistantIndex].Content))
             {
@@ -60,6 +75,7 @@ public sealed class ChatSession
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Chat request failed.");
             Error = ex.Message;
             if (string.IsNullOrEmpty(_messages[assistantIndex].Content))
             {
@@ -77,11 +93,14 @@ public sealed class ChatSession
 
     public void Cancel()
     {
+        _logger.LogDebug("Cancel requested. IsStreaming={IsStreaming}.", IsStreaming);
         _cts?.Cancel();
     }
 
     public void Clear()
     {
+        _logger.LogDebug("Clear requested. MessageCount={MessageCount} IsStreaming={IsStreaming}.", _messages.Count, IsStreaming);
+
         if (IsStreaming)
         {
             Cancel();

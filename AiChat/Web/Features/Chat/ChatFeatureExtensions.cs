@@ -1,4 +1,5 @@
 using System.ClientModel;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenAI;
 using OpenAI.Chat;
@@ -14,6 +15,7 @@ public static class ChatFeatureExtensions
         services.AddSingleton(sp =>
         {
             var options = sp.GetRequiredService<IOptions<ChatOptions>>().Value;
+            var logger = sp.GetRequiredService<ILogger<OpenAIChatClient>>();
 
             if (string.IsNullOrWhiteSpace(options.Endpoint))
             {
@@ -24,6 +26,8 @@ public static class ChatFeatureExtensions
             {
                 throw new InvalidOperationException("Chat:Model is required.");
             }
+
+            logger.LogDebug("Chat client configured. Endpoint={Endpoint} Model={Model}", options.Endpoint, options.Model);
 
             return new ChatClient(
                 options.Model,
