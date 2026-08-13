@@ -74,3 +74,155 @@ button {
 .blazor-error-boundary::after {
     content: "An error has occurred.";
 }
+
+/* Markdown (global — MarkupString HTML is not scoped) */
+.md-body {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text);
+    word-break: break-word;
+}
+
+.md-body > *:first-child {
+    margin-top: 0;
+}
+
+.md-body > *:last-child {
+    margin-bottom: 0;
+}
+
+.md-body p {
+    margin: 0 0 0.85rem;
+}
+
+.md-body h1,
+.md-body h2,
+.md-body h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 1.15rem 0 0.55rem;
+    color: var(--text);
+}
+
+.md-body h1 {
+    font-size: 1.45rem;
+}
+
+.md-body h2 {
+    font-size: 1.25rem;
+}
+
+.md-body h3 {
+    font-size: 1.1rem;
+    color: var(--accent-strong);
+}
+
+.md-body ul,
+.md-body ol {
+    margin: 0 0 0.85rem;
+    padding-left: 1.35rem;
+}
+
+.md-body li {
+    margin: 0.25rem 0;
+}
+
+.md-body li::marker {
+    color: var(--text-muted);
+}
+
+.md-body strong {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.md-body em {
+    font-style: italic;
+}
+
+.md-body a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(232, 163, 92, 0.35);
+}
+
+.md-body a:hover {
+    color: var(--accent-strong);
+    border-bottom-color: var(--accent-strong);
+}
+
+.md-body hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 1.1rem 0;
+}
+
+.md-body blockquote {
+    margin: 0 0 0.85rem;
+    padding: 0.15rem 0 0.15rem 0.9rem;
+    border-left: 3px solid rgba(232, 163, 92, 0.45);
+    color: var(--text-muted);
+}
+
+.md-body code {
+    font-family: ui-monospace, "Cascadia Code", "Segoe UI Mono", Consolas, monospace;
+    font-size: 0.9em;
+    padding: 0.12rem 0.35rem;
+    border-radius: 0.35rem;
+    background: var(--accent-dim);
+    color: var(--accent-strong);
+}
+
+.md-body pre {
+    margin: 0 0 0.85rem;
+    padding: 0.85rem 1rem;
+    border-radius: 0.75rem;
+    background: var(--canvas-elevated);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+}
+
+.md-body pre code {
+    padding: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.md-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 0.85rem;
+    font-size: 0.95rem;
+}
+
+.md-body th,
+.md-body td {
+    border: 1px solid var(--border);
+    padding: 0.45rem 0.65rem;
+    text-align: left;
+}
+
+.md-body th {
+    background: rgba(236, 232, 225, 0.04);
+    font-weight: 600;
+}
+
+.msg-caret {
+    display: inline-block;
+    width: 0.55rem;
+    height: 1.1em;
+    margin-left: 0.15rem;
+    vertical-align: text-bottom;
+    background: var(--accent);
+    border-radius: 1px;
+    animation: caret-pulse 1s ease-in-out infinite;
+}
+
+@keyframes caret-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+}

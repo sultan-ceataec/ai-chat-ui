@@ -41,18 +41,8 @@
                             <div class="msg msg-assistant">
                                 <div class="msg-mark" aria-hidden="true"></div>
                                 <div class="msg-body">
-                                    @if (string.IsNullOrEmpty(message.Content) && Session.IsStreaming)
-                                    {
-                                        <span class="msg-caret" aria-label="Assistant is typing"></span>
-                                    }
-                                    else
-                                    {
-                                        @message.Content
-                                        @if (Session.IsStreaming && message == Session.Messages[^1])
-                                        {
-                                            <span class="msg-caret" aria-hidden="true"></span>
-                                        }
-                                    }
+                                    <MarkdownView Content="@message.Content"
+                                                  ShowCaret="@(Session.IsStreaming && message == Session.Messages[^1])" />
                                 </div>
                             </div>
                         }

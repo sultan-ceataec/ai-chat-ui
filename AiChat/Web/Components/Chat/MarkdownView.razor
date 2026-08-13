@@ -1,0 +1,24 @@
+@inject MarkdownRenderer Renderer
+
+<div class="md-body">
+    @if (string.IsNullOrEmpty(Content) && ShowCaret)
+    {
+        <span class="msg-caret" aria-label="Assistant is typing"></span>
+    }
+    else
+    {
+        @((MarkupString)Renderer.ToHtml(Content))
+        @if (ShowCaret)
+        {
+            <span class="msg-caret" aria-hidden="true"></span>
+        }
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Content { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool ShowCaret { get; set; }
+}

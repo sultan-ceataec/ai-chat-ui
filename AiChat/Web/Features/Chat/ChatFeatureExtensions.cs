@@ -32,6 +32,7 @@ public static class ChatFeatureExtensions
         });
 
         services.AddSingleton<IChatCompletionClient, OpenAIChatClient>();
+        services.AddSingleton<MarkdownRenderer>();
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<ChatSession>();
 
