@@ -1,0 +1,91 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using Web.Features.Chat
+@inject ChatSession Session
+@implements IDisposable
+
+<PageTitle>Chat</PageTitle>
+
+<div class="chat-page">
+    <header class="chat-header">
+        <h1>Chat</h1>
+        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="Clear" disabled="@Session.IsStreaming">
+            New chat
+        </button>
+    </header>
+
+    <div class="chat-transcript">
+        @if (Session.Messages.Count == 0)
+        {
+            <p class="chat-empty">Ask anything to get started.</p>
+        }
+        else
+        {
+            @foreach (var message in Session.Messages)
+            {
+                var css = message.Role == ChatRole.User ? "chat-bubble user" : "chat-bubble assistant";
+                <div class="@css">
+                    <div class="chat-role">@(message.Role == ChatRole.User ? "You" : "Assistant")</div>
+                    <div class="chat-content">@(string.IsNullOrEmpty(message.Content) && Session.IsStreaming ? "…" : message.Content)</div>
+                </div>
+            }
+        }
+
+        @if (!string.IsNullOrEmpty(Session.Error))
+        {
+            <div class="chat-error" role="alert">@Session.Error</div>
+        }
+    </div>
+
+    <form class="chat-composer" @onsubmit="SendAsync" @onsubmit:preventDefault>
+        <textarea class="form-control"
+                  rows="2"
+                  placeholder="Type a message…"
+                  @bind="_draft"
+                  @bind:event="oninput"
+                  @onkeydown="OnKeyDown"
+                  disabled="@Session.IsStreaming"></textarea>
+        <div class="chat-actions">
+            @if (Session.IsStreaming)
+            {
+                <button type="button" class="btn btn-outline-danger" @onclick="Cancel">Stop</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-primary" disabled="@string.IsNullOrWhiteSpace(_draft)">Send</button>
+            }
+        </div>
+    </form>
+</div>
+
+@code {
+    private string _draft = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Session.Changed += OnSessionChanged;
+    }
+
+    private void OnSessionChanged() => InvokeAsync(StateHasChanged);
+
+    private async Task SendAsync()
+    {
+        var text = _draft;
+        _draft = string.Empty;
+        await Session.SendAsync(text);
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey && !Session.IsStreaming && !string.IsNullOrWhiteSpace(_draft))
+        {
+            await SendAsync();
+        }
+    }
+
+    private void Cancel() => Session.Cancel();
+
+    private void Clear() => Session.Clear();
+
+    public void Dispose() => Session.Changed -= OnSessionChanged;
+}
