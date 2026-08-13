@@ -8,12 +8,15 @@
 <div class="studio">
     <header class="studio-header">
         <div class="studio-brand">AiChat</div>
-        <button type="button"
-                class="studio-ghost"
-                @onclick="Clear"
-                disabled="@Session.IsStreaming">
-            New chat
-        </button>
+        <div class="studio-header-actions">
+            <a href="/debug" class="studio-ghost studio-link">Debug</a>
+            <button type="button"
+                    class="studio-ghost"
+                    @onclick="Clear"
+                    disabled="@Session.IsStreaming">
+                New chat
+            </button>
+        </div>
     </header>
 
     <div class="studio-scroll">

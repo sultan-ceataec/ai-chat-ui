@@ -1,11 +1,13 @@
 using Web.Components;
 using Web.Features.Chat;
+using Web.Features.Debug;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.AddDebugFeature();
 builder.Services.AddChatFeature(builder.Configuration);
 
 var app = builder.Build();

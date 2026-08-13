@@ -1,0 +1,77 @@
+@page "/debug"
+@rendermode InteractiveServer
+@inject DebugErrorLog ErrorLog
+@implements IDisposable
+
+<PageTitle>Debug — AiChat</PageTitle>
+
+<div class="studio">
+    <header class="studio-header">
+        <div class="studio-brand">Debug</div>
+        <div class="studio-header-actions">
+            <a href="/" class="studio-ghost studio-link">Chat</a>
+            <button type="button"
+                    class="studio-ghost"
+                    @onclick="Clear"
+                    disabled="@(_errors.Count == 0)">
+                Clear
+            </button>
+        </div>
+    </header>
+
+    <div class="studio-scroll">
+        <div class="studio-column debug-column">
+            <p class="debug-intro">
+                Error and critical log entries captured from this app instance (last 50).
+            </p>
+
+            @if (_errors.Count == 0)
+            {
+                <div class="debug-empty">No errors captured.</div>
+            }
+            else
+            {
+                <div class="debug-list">
+                    @foreach (var error in _errors)
+                    {
+                        <article class="debug-entry">
+                            <header class="debug-entry-header">
+                                <time datetime="@error.UtcNow.ToString("O")">
+                                    @error.UtcNow.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")
+                                </time>
+                                <span class="debug-category">@error.Category</span>
+                            </header>
+                            <p class="debug-message">@error.Message</p>
+                            @if (!string.IsNullOrWhiteSpace(error.ExceptionText))
+                            {
+                                <pre class="debug-exception">@error.ExceptionText</pre>
+                            }
+                        </article>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private IReadOnlyList<DebugError> _errors = [];
+
+    protected override void OnInitialized()
+    {
+        Refresh();
+        ErrorLog.Changed += OnErrorLogChanged;
+    }
+
+    private void OnErrorLogChanged() => InvokeAsync(() =>
+    {
+        Refresh();
+        StateHasChanged();
+    });
+
+    private void Refresh() => _errors = ErrorLog.Snapshot();
+
+    private void Clear() => ErrorLog.Clear();
+
+    public void Dispose() => ErrorLog.Changed -= OnErrorLogChanged;
+}

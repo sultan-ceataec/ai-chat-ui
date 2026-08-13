@@ -1,0 +1,86 @@
+.studio-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.studio-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.debug-column {
+    max-width: 52rem;
+}
+
+.debug-intro {
+    margin: 0 0 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.debug-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.debug-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding-bottom: 1.5rem;
+}
+
+.debug-entry {
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius-lg);
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+}
+
+.debug-entry-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.debug-entry-header time {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.debug-category {
+    color: var(--accent-strong);
+    font-family: ui-monospace, "Cascadia Code", "Segoe UI Mono", monospace;
+    font-size: 0.78rem;
+    word-break: break-all;
+}
+
+.debug-message {
+    margin: 0;
+    color: var(--danger);
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+.debug-exception {
+    margin: 0.75rem 0 0;
+    padding: 0.75rem;
+    border-radius: 0.65rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: ui-monospace, "Cascadia Code", "Segoe UI Mono", monospace;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
