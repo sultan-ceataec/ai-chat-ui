@@ -10,5 +10,7 @@ public sealed class ChatOptions
 
     public string ApiKey { get; set; } = string.Empty;
 
+    public string ApimSubscriptionKey { get; set; } = string.Empty;
+
     public string SystemPrompt { get; set; } = "You are a helpful assistant.";
 }

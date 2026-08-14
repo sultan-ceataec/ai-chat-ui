@@ -1,4 +1,5 @@
 using System.ClientModel;
+using System.ClientModel.Primitives;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenAI;
@@ -29,10 +30,23 @@ public static class ChatFeatureExtensions
 
             logger.LogDebug("Chat client configured. Endpoint={Endpoint} Model={Model}", options.Endpoint, options.Model);
 
+            var clientOptions = new OpenAIClientOptions
+            {
+                Endpoint = new Uri(options.Endpoint),
+            };
+
+            if (!string.IsNullOrWhiteSpace(options.ApimSubscriptionKey))
+            {
+                clientOptions.AddPolicy(
+                    new ApimSubscriptionKeyHandler(options.ApimSubscriptionKey),
+                    PipelinePosition.PerCall);
+                logger.LogDebug("APIM subscription key policy enabled.");
+            }
+
             return new ChatClient(
                 options.Model,
                 new ApiKeyCredential(string.IsNullOrWhiteSpace(options.ApiKey) ? "placeholder" : options.ApiKey),
-                new OpenAIClientOptions { Endpoint = new Uri(options.Endpoint) });
+                clientOptions);
         });
 
         services.AddSingleton<IChatCompletionClient, OpenAIChatClient>();
