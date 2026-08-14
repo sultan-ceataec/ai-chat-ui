@@ -4,7 +4,7 @@ namespace Web.Features.Chat;
 
 public sealed class ApimSubscriptionKeyHandler : PipelinePolicy
 {
-    private const string HeaderName = "Ocp-Apim-Subscription-Key";
+    private const string HeaderName = "api-key";
 
     private readonly string _subscriptionKey;
 
