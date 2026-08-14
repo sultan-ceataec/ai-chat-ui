@@ -1,6 +1,6 @@
 @page "/debug"
 @rendermode InteractiveServer
-@inject DebugErrorLog ErrorLog
+@inject DiagnosticErrorLog ErrorLog
 @implements IDisposable
 
 <PageTitle>Debug — AiChat</PageTitle>
@@ -55,7 +55,7 @@
 </div>
 
 @code {
-    private IReadOnlyList<DebugError> _errors = [];
+    private IReadOnlyList<DiagnosticError> _errors = [];
 
     protected override void OnInitialized()
     {
