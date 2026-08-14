@@ -2,7 +2,8 @@ namespace Web.Features.Chat;
 
 public interface IChatCompletionClient
 {
-    IAsyncEnumerable<string> StreamAsync(
+    IAsyncEnumerable<ChatStreamPart> StreamTurnAsync(
         IReadOnlyList<ChatMessage> messages,
+        IReadOnlyList<ChatToolDefinition> tools,
         CancellationToken cancellationToken = default);
 }

@@ -4,5 +4,6 @@ public enum ChatRole
 {
     System,
     User,
-    Assistant
+    Assistant,
+    Tool,
 }

@@ -1,6 +1,7 @@
 using Web.Components;
 using Web.Features.Chat;
 using Web.Features.Debug;
+using Web.Features.Mcp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.AddDebugFeature();
+builder.Services.AddMcpFeature(builder.Configuration);
 builder.Services.AddChatFeature(builder.Configuration);
 
 var app = builder.Build();
